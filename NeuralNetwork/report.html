@@ -1,0 +1,172 @@
+
+<html>
+<head>
+<title> CS440 Homework Template: HW[x] Student Name [xxx]  </title>
+<style>
+<!--
+body{
+font-family: 'Trebuchet MS', Verdana;
+}
+p{
+font-family: 'Trebuchet MS', Times;
+margin: 10px 10px 15px 20px;
+}
+h3{
+margin: 5px;
+}
+h2{
+margin: 10px;
+}
+h1{
+margin: 10px 0px 0px 20px;
+}
+div.main-body{
+align:center;
+margin: 30px;
+}
+hr{
+margin:20px 0px 20px 0px;
+}
+-->
+</style>
+</head>
+
+<body>
+<center>
+<a href="http://www.bu.edu"><img border="0" src="http://www.cs.bu.edu/fac/betke/images/bu-logo.gif"
+width="119" height="120"></a>
+</center>
+
+<h1>Assignment Title</h1>
+<p> 
+ CS 440 Programming assignment 1 <br>
+ Andre Pires <br>
+ <br>
+    3/6/18 
+</p>
+
+<div class="main-body">
+<hr>
+<h2> Problem Definition </h2>
+<p>
+The current problem to be solved is to seperate two distinct groups of data and classify them accordingly.
+The data is defined as having an (X) and a (Y) component, and as such can be visualized using a graph.
+We are given a set of non-linear datapoints, and our goal is to categorize them in an accurate manner.
+</p>
+
+<hr>
+<h2> Method and Implementation </h2>
+<p>In order to tackle this problem, I shall create a Neural Network consisting of:</p>
+<p>- an input layer with 2 nodes (a1)</p>
+<p>- a hidden layer (a2)</p>
+<p>- an output layer with 1 node (a3)</p>
+<p>- weights from a1 to a2 (W)</p>
+<p>- weights from a2 to a3 (V)</p>
+
+<p>
+The output node will signify a True or False response to the statement: "The input vector belongs in Class 1".
+An output of True means the vector is of Class 1, and an output of False means the vector is of Class 0.
+</p>
+
+<p>
+before the weight layers are applied, layers a1 and a2 have another node added to them with the value of +1, incorporating a bias term.
+</p>
+
+<p>
+For a certain number of epochs, we train on a dataset of (x1,x2) pairs with a bias term attached, resulting in a matrix of (3 x samplesize)
+We multiply this (W) to get a2, we add the +1 bias node, and we multiply this with (V) to get (a3), the prediction.
+
+Using backpropogation, we can train the net to have a higher accuracy.
+
+</p>
+
+<hr>
+<h2>Experiments</h2>
+<p>
+After fine tuning several paramaters, I found an alpha of 0.01 and a hidden_layer size of 8 to be effecient enough to achieve an accuracy of 99% or higher.
+</p><p>
+An experiment was done to see how error over time changes along with the learning rate. Neural Networks with the exact same paramaters and training sets were pitted against one another with the only difference being the learning rate. Below are the results:
+</p>
+<img src="learningrates.png">
+<p>
+As we can see, a learning rate of 0.01 seems to be most effecient and consistent. Other learning rates tend to dance around the gradient instead of slowly descending to the proper answer. In short, the lower the learning rate the more consistent the result will be at the cost of the time needed to reach the target.
+</p>
+
+
+<hr>
+<h2> Results</h2>
+<p>
+Using 5-Fold round robin validation we can see that the Neural Network's results are consistent.
+And we can create a confusion matrix to evaluate the Neural Network's performance.
+</p><p>
+Below is the confusion matrix for the Neural Net trained on the nonlinear dataset and its corresponding decision boundary graph.
+</p>
+<p>
+<img src="accuracy99.png"><img src="confusionmatrix.png">
+</p>
+
+<p>
+Below is the confusion matrix for the Neural Net trained on the linear dataset.
+</p>
+<p>
+<img src="lineargraph.png"><img src="linearmatrix.png">
+</p>
+<p>
+Looking at these confusion matricies, we see a very nice overall accuracy of about 97% - where each Neural Network in the K-fold was only trained for 10% the time as the one above. This is useful for evaluating our system because it tells us exactly what it excels at. Looking at this, we can see that the network performs well in all categories, showing no bias toward Classificatoin 1 or 2, having very low false-positive and false-negative rates, and a high degree of accuracy.
+</p>
+
+<hr>
+<h2> Discussion </h2>
+
+<p> 
+My approach:
+<ul>
+<li>I think my method of creating the Neural Network is a great combination of both speed and accuracy. It is able to train 10000 epochs in about 7 seconds. There is no obvious signs of overfitting.</li>
+<li>If I had more time, I would make the input and output dimensions inferrable by the arguments, instead of being manually specified.</li> 
+</ul>
+</p>
+
+<hr>
+<h2> Overfitting </h2>
+
+<p>
+Although not seen in my Neural Net, Overfitting is when the output corresponds too closely or exactly to the training dataset, and doesn't perform well on external data sets. Essentially, the neural network merely memorizes the training data and regurgitates it back out.
+</p>
+<p>
+<img src="overfitting.png">
+</p>
+<p>
+Three examples of ways to reduce overfitting are:
+<li>Increase size of dataset
+	<p>
+	Increasing the size of the dataset makes it more difficult for the network to simply memorize it and regurgitate it, therefore reducing the possibility that it will overfit.
+	</p>
+</li>
+<li>Add noise to the dataset
+	<p>
+	Adding noise to the dataset allows the network to train for the more general case - that is, it will be able to generalize to other datasets easier. This reduces the ability of the network to overfit.
+	</p>
+</li>
+<li>Add L1 or L2 regularization
+	<p>
+	Adding regularization minimizes the magnitude of the weights, whereas without regularization the weights can be arbitrarily large. This forces the network to make compromises on its weights, and prevents the network from simply memorizing the dataset.
+	
+	</p>
+</li>
+</p>
+<h2>L2 Regularization</h2>
+
+<p>
+L2 Regularization is a form of regularization that minimizes the squared magnitude of the weights, not to be confused with L1 Regularization which minimizes the magnitude of the weights. 
+</p><p>By adding Regularization to the neural network, the performance is as follows:
+</p>
+<img src="accl2.png">
+<p>
+All paramaters remained the same, including layer size, epochs, and learning rate. The accuracy dropped to 80% however it will probably generalize better to other sets since it isn't overfitting as hard as the system above. This is to be expected, as it now needs to train longer to achieve the same level as accuracy on the training sets as before.
+</div>
+</body>
+
+<h2>Citations</h2>
+<a href="https://hackernoon.com/memorizing-is-not-learning-6-tricks-to-prevent-overfitting-in-machine-learning-820b091dc42">https://hackernoon.com/memorizing-is-not-learning-6-tricks-to-prevent-overfitting-in-machine-learning-820b091dc42</a>
+
+</html>
